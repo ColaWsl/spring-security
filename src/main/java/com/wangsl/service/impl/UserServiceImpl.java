@@ -2,7 +2,7 @@ package com.wangsl.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.wangsl.config.DBUserDetailsManager;
+import com.wangsl.config.security.DBUserDetailsManager;
 import com.wangsl.domain.User;
 import com.wangsl.mapper.UserMapper;
 import com.wangsl.service.UserService;

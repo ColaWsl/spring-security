@@ -1,4 +1,4 @@
-package com.wangsl.config;
+package com.wangsl.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -26,7 +25,11 @@ public class SecurityConfig {
 								.authenticated() // 已认证的请求会被自动授权
 				)
 				.httpBasic(Customizer.withDefaults()) // 使用基本授权方式
-				.formLogin(Customizer.withDefaults()); // 自动使用表单登录
+				// .formLogin(Customizer.withDefaults()); // 自动使用表单登录
+				.formLogin(form -> form.loginPage("/login").permitAll()
+						.successHandler(new MyAuthenticationSuccessHandler())
+						.failureHandler(new MyAuthenticationFaliureHandler())
+				); // 自定义登录页面;
 		return http.build();
 	}
 

@@ -1,4 +1,4 @@
-package com.wangsl.config;
+package com.wangsl.config.mybatis;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;

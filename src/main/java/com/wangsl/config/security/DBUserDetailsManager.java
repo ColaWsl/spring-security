@@ -1,4 +1,4 @@
-package com.wangsl.config;
+package com.wangsl.config.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wangsl.domain.User;
@@ -38,6 +38,7 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// 根据用户名从数据库中查询用户
 		User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
 		if(Objects.isNull(user)){
 			log.error("username is not exist");
@@ -56,6 +57,7 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
 		);
 	}
 
+	// 更新密码
 	@Override
 	public UserDetails updatePassword(UserDetails userDetails, String newPassword) {
 		User user = new User();

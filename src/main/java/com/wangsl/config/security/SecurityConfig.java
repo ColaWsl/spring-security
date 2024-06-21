@@ -2,7 +2,6 @@ package com.wangsl.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,19 +16,26 @@ public class SecurityConfig {
 	// 过滤器链
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-				// .csrf(Customizer.withDefaults())
-				.csrf(AbstractHttpConfigurer::disable) // 关闭csrf保护
-				.authorizeHttpRequests( // 开启授权保护
+		// .csrf(Customizer.withDefaults())
+		http.csrf(AbstractHttpConfigurer::disable);// 关闭csrf保护
+
+		http.authorizeHttpRequests( // 开启授权保护
 						authorize -> authorize.anyRequest() // 对所有请求开启授权保护
 								.authenticated() // 已认证的请求会被自动授权
-				)
-				.httpBasic(Customizer.withDefaults()) // 使用基本授权方式
-				// .formLogin(Customizer.withDefaults()); // 自动使用表单登录
-				.formLogin(form -> form.loginPage("/login").permitAll()
+		);
+
+
+		// .formLogin(Customizer.withDefaults()); // 自动使用表单登录
+		http.formLogin(form -> form.loginPage("/login").permitAll()
 						.successHandler(new MyAuthenticationSuccessHandler())
 						.failureHandler(new MyAuthenticationFaliureHandler())
-				); // 自定义登录页面;
+		);
+		// http.httpBasic(Customizer.withDefaults()) // 使用基本授权方式
+
+
+		// 注销时的处理
+		http.logout(logout -> logout.logoutSuccessHandler(new MyLogoutSuccessHandler()));
+
 		return http.build();
 	}
 

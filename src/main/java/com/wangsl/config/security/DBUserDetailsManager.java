@@ -46,15 +46,27 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
 		}
 
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
-		return new org.springframework.security.core.userdetails.User(
-				user.getUsername(),
-				user.getPassword(),
-				user.getEnabled() == 1,
-				true,
-				true,
-				true,
-				authorities
-		);
+		authorities.add(() -> "USER_LIST");
+		// authorities.add(() -> "USER_ADD");
+		// return new org.springframework.security.core.userdetails.User(
+		// 		user.getUsername(),
+		// 		user.getPassword(),
+		// 		user.getEnabled() == 1,
+		// 		true,
+		// 		true,
+		// 		true,
+		// 		authorities
+		// );
+
+		return org.springframework.security.core.userdetails.User
+				.withUsername(user.getUsername())
+				.password(user.getPassword())
+				.disabled(user.getEnabled() != 1)
+				.credentialsExpired(false)
+				.accountLocked(false)
+				.roles("ADMIN")
+				.build();
+
 	}
 
 	// 更新密码

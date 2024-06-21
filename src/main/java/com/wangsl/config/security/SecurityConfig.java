@@ -3,6 +3,7 @@ package com.wangsl.config.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,8 +22,9 @@ public class SecurityConfig {
 
 		http.authorizeHttpRequests( // 开启授权保护
 						authorize -> authorize
-								.requestMatchers("/user/list").hasAuthority("USER_LIST")
-								.requestMatchers("/user/add").hasAnyRole("USER_ADD")
+								// .requestMatchers("/user/list").hasAuthority("USER_LIST")
+								// .requestMatchers("/user/add").hasAuthority("USER_ADD")
+								.requestMatchers("/user/**").hasRole("ADMIN")
 								.anyRequest() // 对所有请求开启授权保护
 								.authenticated() // 已认证的请求会被自动授权
 		);

@@ -39,6 +39,9 @@ public class SecurityConfig {
 		// 未认证的请求处理
 		http.exceptionHandling(exception -> exception.authenticationEntryPoint(new MyAuthenticationEntryPoint()));
 
+		// 并发会话控制
+		http.sessionManagement(session -> session.maximumSessions(1).expiredSessionStrategy(new MySessionInformationExpiredStrategy()));
+
 		// 开启跨域权限
 		http.cors(Customizer.withDefaults());
 

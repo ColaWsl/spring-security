@@ -20,7 +20,10 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		http.authorizeHttpRequests( // 开启授权保护
-						authorize -> authorize.anyRequest() // 对所有请求开启授权保护
+						authorize -> authorize
+								.requestMatchers("/user/list").hasAuthority("USER_LIST")
+								.requestMatchers("/user/add").hasAnyRole("USER_ADD")
+								.anyRequest() // 对所有请求开启授权保护
 								.authenticated() // 已认证的请求会被自动授权
 		);
 
@@ -37,7 +40,9 @@ public class SecurityConfig {
 		http.logout(logout -> logout.logoutSuccessHandler(new MyLogoutSuccessHandler()));
 
 		// 未认证的请求处理
-		http.exceptionHandling(exception -> exception.authenticationEntryPoint(new MyAuthenticationEntryPoint()));
+		http.exceptionHandling(exception ->
+			exception.authenticationEntryPoint(new MyAuthenticationEntryPoint())
+					.accessDeniedHandler(new MyAccessDeniedHandler()));
 
 		// 并发会话控制
 		http.sessionManagement(session -> session.maximumSessions(1).expiredSessionStrategy(new MySessionInformationExpiredStrategy()));

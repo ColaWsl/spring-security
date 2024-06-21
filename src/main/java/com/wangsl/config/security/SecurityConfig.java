@@ -2,12 +2,14 @@ package com.wangsl.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 
 @Configuration
 @EnableWebSecurity // 开启自定义配置（在springboot可以省略）
@@ -16,8 +18,6 @@ public class SecurityConfig {
 	// 过滤器链
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		// .csrf(Customizer.withDefaults())
-		http.csrf(AbstractHttpConfigurer::disable);// 关闭csrf保护
 
 		http.authorizeHttpRequests( // 开启授权保护
 						authorize -> authorize.anyRequest() // 对所有请求开启授权保护
@@ -35,6 +35,15 @@ public class SecurityConfig {
 
 		// 注销时的处理
 		http.logout(logout -> logout.logoutSuccessHandler(new MyLogoutSuccessHandler()));
+
+		// 未认证的请求处理
+		http.exceptionHandling(exception -> exception.authenticationEntryPoint(new MyAuthenticationEntryPoint()));
+
+		// 开启跨域权限
+		http.cors(Customizer.withDefaults());
+
+		// .csrf(Customizer.withDefaults())
+		http.csrf(AbstractHttpConfigurer::disable);// 关闭csrf保护
 
 		return http.build();
 	}

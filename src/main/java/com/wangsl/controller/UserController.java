@@ -3,6 +3,7 @@ package com.wangsl.controller;
 import com.wangsl.domain.User;
 import com.wangsl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping("/list")
+	@PreAuthorize("hasRole('ADMIN')")
 	public List<User> user() {
 		List<User> list = userService.list();
 		return list;
@@ -25,6 +27,7 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping("/add")
+	@PreAuthorize("hasRole('USER')")
 	public String add(@RequestBody User user) {
 		userService.saveUserDetials(user);
 		return "success";

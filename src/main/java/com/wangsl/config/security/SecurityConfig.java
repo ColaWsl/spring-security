@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 
 @Configuration
-@EnableWebSecurity // 开启自定义配置（在springboot可以省略）
+// @EnableWebSecurity // 开启自定义配置（在springboot可以省略）
+@EnableMethodSecurity // 开启方法授权
 public class SecurityConfig {
 
 	// 过滤器链
@@ -24,7 +24,8 @@ public class SecurityConfig {
 						authorize -> authorize
 								// .requestMatchers("/user/list").hasAuthority("USER_LIST")
 								// .requestMatchers("/user/add").hasAuthority("USER_ADD")
-								.requestMatchers("/user/**").hasRole("ADMIN")
+								// .requestMatchers("/user/**").hasRole("ADMIN")
+								// .requestMatchers("/test").hasRole("TEST")
 								.anyRequest() // 对所有请求开启授权保护
 								.authenticated() // 已认证的请求会被自动授权
 		);

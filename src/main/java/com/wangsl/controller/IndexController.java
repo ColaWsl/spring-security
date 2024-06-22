@@ -1,5 +1,6 @@
 package com.wangsl.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -22,6 +23,7 @@ public class IndexController {
 
 	@ResponseBody
 	@GetMapping("/test")
+	@PreAuthorize("hasRole('TEST')")
 	public Map test() {
 		// 获取认证的相关信息
 		SecurityContext context = SecurityContextHolder.getContext();
